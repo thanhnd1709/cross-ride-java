@@ -37,11 +37,10 @@ import com.crossover.techtrial.service.RideService;
 public class RideController {
 
 	@Autowired
-	RideService rideService;
-	
-	@Autowired
-	PersonService personService;
+	private RideService rideService;
 
+	@Autowired
+	private PersonService personService;
 
 	@PostMapping(path = "/api/ride")
 	public ResponseEntity<Ride> createNewRide(@Valid @RequestBody Ride ride) {
@@ -60,28 +59,31 @@ public class RideController {
 	 * This API returns the top 5 drivers with their email,name, total minutes,
 	 * maximum ride duration in minutes. Only rides that starts and ends within the
 	 * mentioned durations should be counted. Any rides where either start or
-	 * endtime is outside the search, should not be considered. 
-	 * DONT CHANGE METHOD SIGNATURE AND RETURN TYPES 
+	 * endtime is outside the search, should not be considered. DONT CHANGE METHOD
+	 * SIGNATURE AND RETURN TYPES
+	 * 
 	 * @return
 	 */
 	@GetMapping(path = "/api/top-rides")
 	public ResponseEntity<List<TopDriverDTO>> getTopDriver(@RequestParam(value = "max", defaultValue = "5") Long count,
 			@RequestParam(value = "startTime", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime startTime,
 			@RequestParam(value = "endTime", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime endTime) {
-		
+
 		List<TopDriverDTO> topDrivers = new ArrayList<TopDriverDTO>();
 		// start implementation
 		// get rideList
 		List<Ride> rideList = rideService.getAll();
-		// filter to driver list which satisfied  the start time and end time
-		rideList = rideList.stream().filter(ride -> ride.getDriver() != null).filter(ride -> !startTime.isAfter(LocalDateTime.parse(ride.getStartTime())))
+		// filter to driver list which satisfied the start time and end time
+		rideList = rideList.stream().filter(ride -> ride.getDriver() != null)
+				.filter(ride -> !startTime.isAfter(LocalDateTime.parse(ride.getStartTime())))
 				.filter(ride -> !endTime.isBefore(LocalDateTime.parse(ride.getEndTime()))).collect(Collectors.toList());
-		
+
 		// Get person list
 		List<Person> personList = personService.getAll();
 		for (Person person : personList) {
 			// for each person, get personal ride list
-			List<Ride> personalRideList = rideList.stream().filter(ride -> ride.getDriver().getId() == person.getId()).collect(Collectors.toList());
+			List<Ride> personalRideList = rideList.stream().filter(ride -> ride.getDriver().getId() == person.getId())
+					.collect(Collectors.toList());
 			if (personalRideList.size() > 0) {
 				// convert to TopDriverDTO with each person
 				TopDriverDTO tempDTO = convertToDto(person, personalRideList);
@@ -89,15 +91,21 @@ public class RideController {
 			}
 		}
 		// Here I a little bit confuse about the TOP 5 expression.
-		// What do you mean by "TOP", base on he is fastest in one ride, or fastest in average, or max total distance?
+		// What do you mean by "TOP", base on he is fastest in one ride, or fastest in
+		// average, or max total distance?
 		// Therefore, i just return 5 (or count) top rows
 		return ResponseEntity.ok(topDrivers.stream().limit(count).collect(Collectors.toList()));
 
 	}
+
 	/**
-	 * This function is used to create the TopDriverDTO from current person and his rides
-	 * @param person current person
-	 * @param personalRideList ride list of this person
+	 * This function is used to create the TopDriverDTO from current person and his
+	 * rides
+	 * 
+	 * @param person
+	 *            current person
+	 * @param personalRideList
+	 *            ride list of this person
 	 * @return
 	 */
 	private TopDriverDTO convertToDto(Person person, List<Ride> personalRideList) {
@@ -112,20 +120,25 @@ public class RideController {
 		Long totalRideDurationInSeconds = 0L;
 		Long maxRideDurationInSecods = 0L;
 		int count = personalRideList.size();
-		// for loop to calculate total distance, total ride duration and maxride duration in seconds
+		// for loop to calculate total distance, total ride duration and maxride
+		// duration in seconds
 		for (Ride ride : personalRideList) {
 			// get totalDistance
 			totalDistance += ride.getDistance();
-			//get total ride duration in seconds
-			totalRideDurationInSeconds += Duration.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime())).getSeconds();
+			// get total ride duration in seconds
+			totalRideDurationInSeconds += Duration
+					.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime()))
+					.getSeconds();
 			// calculate the max ride duration in second
-			Long currentRideDuration = Duration.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime())).getSeconds();
+			Long currentRideDuration = Duration
+					.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime()))
+					.getSeconds();
 			if (maxRideDurationInSecods < currentRideDuration) {
 				maxRideDurationInSecods = currentRideDuration;
 			}
 		}
 		// calculate the average distance value
-		averageDistance = totalDistance/count;
+		averageDistance = totalDistance / count;
 		// set attributes to topDriverDTO
 		topDriverDTO.setAverageDistance(averageDistance);
 		topDriverDTO.setTotalRideDurationInSeconds(totalRideDurationInSeconds);

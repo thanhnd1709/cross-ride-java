@@ -35,12 +35,12 @@ public class RideServiceImpl implements RideService {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public List<Ride> getAll() {
 		List<Ride> rideList = new ArrayList<>();
-	    rideRepository.findAll().forEach(rideList::add);
-	    return rideList;
+		rideRepository.findAll().forEach(rideList::add);
+		return rideList;
 	}
 
 }

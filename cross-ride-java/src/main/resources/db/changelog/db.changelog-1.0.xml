@@ -5,19 +5,32 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_person"/>
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="registration_number" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="registration_number" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
         </createTable>
         <createTable tableName="ride">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_ride"/>
             </column>
-            <column name="driver_id" type="BIGINT"/>
-            <column name="rider_id" type="BIGINT"/>
-            <column name="start_time" type="VARCHAR(255)"/>
-            <column name="end_time" type="VARCHAR(255)"/>
-            <column name="distance" type="BIGINT"/>
+            <column name="driver_id" type="BIGINT"> 
+            </column>
+            <column name="rider_id" type="BIGINT"> 
+            </column>
+            <column name="start_time" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="distance" type="BIGINT">
+            </column>
         </createTable>
          <addForeignKeyConstraint baseColumnNames="driver_id"
             baseTableName="ride"

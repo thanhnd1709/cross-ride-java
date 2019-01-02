@@ -10,9 +10,10 @@ import com.crossover.techtrial.model.Person;
 
 /**
  * Person repository for basic operations on Person entity.
+ * 
  * @author crossover
  */
-@RestResource(exported=false)
+@RestResource(exported = false)
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
-  Optional<Person> findById(Long id);
+	Optional<Person> findById(Long id);
 }
