@@ -1,13 +1,15 @@
 package com.crossover.test.builder;
 
+import java.time.LocalDateTime;
+
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
 
 public class RideBuilder {
 
 	Long id;
-	String startTime;
-	String endTime;
+	LocalDateTime startTime;
+	LocalDateTime endTime;
 	Long distance;
 	Person driver;
 	Person rider;
@@ -17,12 +19,12 @@ public class RideBuilder {
 		return this;
 	}
 
-	public RideBuilder withStartTime(String startTime) {
+	public RideBuilder withStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 		return this;
 	}
 
-	public RideBuilder withEndTime(String endTime) {
+	public RideBuilder withEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 		return this;
 	}

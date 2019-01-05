@@ -4,6 +4,7 @@
 package com.crossover.techtrial.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -33,13 +34,13 @@ public @Data class Ride implements Serializable {
 
 	@NotNull
 	@Column(name = "start_time")
-	@Size(max=255)
-	String startTime;
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	LocalDateTime startTime;
 
 	@NotNull
 	@Column(name = "end_time")
-	@Size(max=255)
-	String endTime;
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	LocalDateTime endTime;
 
 	@Column(name = "distance")
 	@Min(value = 0L)
@@ -53,7 +54,7 @@ public @Data class Ride implements Serializable {
 	@JoinColumn(name = "rider_id", referencedColumnName = "id")
 	Person rider;
 
-	public Ride(@NotNull Long id, @NotNull String startTime, @NotNull String endTime,@Min(value = 0L) Long distance, Person driver,
+	public Ride(@NotNull Long id, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime,@Min(value = 0L) Long distance, Person driver,
 			Person rider) {
 		super();
 		this.id = id;

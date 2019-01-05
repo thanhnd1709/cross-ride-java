@@ -24,8 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.crossover.techtrial.dto.TopDriverDTO;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
-import com.crossover.techtrial.service.PersonService;
 import com.crossover.techtrial.service.RideService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * RideController for Ride related APIs.
@@ -34,24 +35,26 @@ import com.crossover.techtrial.service.RideService;
  *
  */
 @RestController
+@Slf4j
 public class RideController {
 
 	@Autowired
 	private RideService rideService;
 
-	@Autowired
-	private PersonService personService;
-
 	@PostMapping(path = "/api/ride")
 	public ResponseEntity<Ride> createNewRide(@Valid @RequestBody Ride ride) {
-		return ResponseEntity.ok(rideService.save(ride));
+		rideService.save(ride);
+		log.info("Ride {} was registered successfully", ride);
+		return ResponseEntity.ok(ride);
 	}
 
 	@GetMapping(path = "/api/ride/{ride-id}")
 	public ResponseEntity<Ride> getRideById(@PathVariable(name = "ride-id", required = true) Long rideId) {
 		Ride ride = rideService.findById(rideId);
-		if (ride != null)
+		if (ride != null) {
+			log.info("Getting ride successfully");
 			return ResponseEntity.ok(ride);
+		}
 		return ResponseEntity.notFound().build();
 	}
 
@@ -70,6 +73,8 @@ public class RideController {
 			@RequestParam(value = "endTime", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime endTime) {
 
 		List<TopDriverDTO> topDrivers = new ArrayList<TopDriverDTO>();
+		
+		/*
 		// start implementation
 		// get rideList
 		List<Ride> rideList = rideService.getAll();
@@ -89,7 +94,7 @@ public class RideController {
 				TopDriverDTO tempDTO = convertToDto(person, personalRideList);
 				topDrivers.add(tempDTO);
 			}
-		}
+		}*/
 		// Here I a little bit confuse about the TOP 5 expression.
 		// What do you mean by "TOP", base on he is fastest in one ride, or fastest in
 		// average, or max total distance?
@@ -127,11 +132,11 @@ public class RideController {
 			totalDistance += ride.getDistance();
 			// get total ride duration in seconds
 			totalRideDurationInSeconds += Duration
-					.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime()))
+					.between(ride.getStartTime(), ride.getEndTime())
 					.getSeconds();
 			// calculate the max ride duration in second
 			Long currentRideDuration = Duration
-					.between(LocalDateTime.parse(ride.getStartTime()), LocalDateTime.parse(ride.getEndTime()))
+					.between(ride.getStartTime(), ride.getEndTime())
 					.getSeconds();
 			if (maxRideDurationInSecods < currentRideDuration) {
 				maxRideDurationInSecods = currentRideDuration;

@@ -1,0 +1,44 @@
+1. CrossRideApplication : 
+	- Better to enable transaction, caching
+2. All variable fields should be changed to private : 
+	Ex : PersonController.PersonService -- done
+3. Must not have TODO in final code : Person class -- DONE
+4. Apply lombok to all Entity/Bean/Dto code (@Data,@Getter,@Setter,@EqualHashcode...) -- DONE
+5. getTopDriver
+	- to get list driver that has drive.startTime >= inputStartTime and drive.endTime <= inputEndTime : use sql to get list of driver. It's a nightmare to use api since can cause performance issue => very serious
+	- to calculate average distance, max duration, total duration ... : use window method of sql, better performance. The current api to calculate average, by personService.getAll() is truely terrible.
+	- also use sql to return the limit of record
+6. Need to improve exception handler.
+	- the message : "Unable to process this request." is too common and not specific, need to handle more specific case with detail message
+	- no logging mechanism in all class => not acceptable
+	
+7. Model : 
+	- Person.name should be not null
+	- Ride.distance should be validated to be > 0
+	- all the constraint (not null,...) should be added to database level (db.changelog.xml)
+	- need valdiation of model for name,email,number to not bigger than 255 chars
+	
+	
+8. repository : 
+	- Consider the need of using RestResource (this api will public the api through rest api so can be call in angular code (client javascript code))
+
+9. Services : 
+	- Use transactional for services update/add method
+	- remove PersonService.getAll => it is very bad to get all the database, performance is not acceptable in many case
+	- PersonService.findById is really no need, we can use the default findById that return Optional<Person>
+	- Move the logic of the code getTopDriver to service, it's not suppose to have logic code in controller.
+II. Unit test
+1. RideTest : 
+	There is no need to mock Person since there is no logic and dependency code in Person => not understanding of the mock
+	we only use mock in Service code (depend on Repository)  or Repository code (depend on database)
+2. Remove CrossRideApplicationTest, should not keep empty test class => no meaning
+3. Should use test profile for test
+4. Unit test can use an attached database for testing, with test profile
+5. Should have two type of controller testing : 
+	- Test controller as a separate code : => use mock for service (this is unit testing)
+	- Test controller as a whole of code : => no use of mock (this is integration test or functional test) use the attached database for this 
+
+		
+General comment : 
+	- code format is too bad => very careless developer => not acceptable
+	
