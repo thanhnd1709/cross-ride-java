@@ -3,11 +3,13 @@
  */
 package com.crossover.techtrial.dto;
 
+import lombok.Data;
+
 /**
  * @author crossover
  *
  */
-public class TopDriverDTO {
+public @Data class TopDriverDTO {
 
 	/**
 	 * Constructor for TopDriverDTO
@@ -41,45 +43,4 @@ public class TopDriverDTO {
 	private Long maxRideDurationInSecods;
 
 	private Double averageDistance;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Long getTotalRideDurationInSeconds() {
-		return totalRideDurationInSeconds;
-	}
-
-	public void setTotalRideDurationInSeconds(Long totalRideDurationInSeconds) {
-		this.totalRideDurationInSeconds = totalRideDurationInSeconds;
-	}
-
-	public Long getMaxRideDurationInSecods() {
-		return maxRideDurationInSecods;
-	}
-
-	public void setMaxRideDurationInSecods(Long maxRideDurationInSecods) {
-		this.maxRideDurationInSecods = maxRideDurationInSecods;
-	}
-
-	public Double getAverageDistance() {
-		return averageDistance;
-	}
-
-	public void setAverageDistance(Double averageDistance) {
-		this.averageDistance = averageDistance;
-	}
-
 }

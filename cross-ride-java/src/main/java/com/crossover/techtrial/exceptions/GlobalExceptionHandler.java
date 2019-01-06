@@ -38,9 +38,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		log.error("Message not readable exception", ex);
-		return handleExceptionInternal(ex, ex.getMessage(), headers, status, request);
+		return handleExceptionInternal(ex, "Please enter correct Date Time format", headers, status, request);
 	}
 	
+	@ExceptionHandler(value= {RideException.class}) 
+	public ResponseEntity<Object> handleRideException(RideException exception) {
+		// general exception
+		log.error("Exception: Ride exception ", exception);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+	}
 	/**
 	 * Global Exception handler for all exceptions.
 	 */

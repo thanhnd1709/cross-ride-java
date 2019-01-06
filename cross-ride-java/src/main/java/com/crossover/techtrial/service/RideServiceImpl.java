@@ -3,6 +3,7 @@
  */
 package com.crossover.techtrial.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.crossover.techtrial.dto.TopDriverDTO;
 import com.crossover.techtrial.model.Ride;
 import com.crossover.techtrial.repositories.RideRepository;
 
@@ -37,9 +39,10 @@ public class RideServiceImpl implements RideService {
 	}
 
 	@Override
-	public List<Ride> getAll() {
-		List<Ride> rideList = new ArrayList<>();
-		rideRepository.findAll().forEach(rideList::add);
+	public List<TopDriverDTO> getTopRides(Long count, LocalDateTime startTime, LocalDateTime endTime) {
+		List<TopDriverDTO> rideList = new ArrayList<>();
+		//rideRepository.getTopRides(count,startTime, endTime).forEach(rideList::add);
+		List<Object[]> newList= rideRepository.getTopRides(count,startTime, endTime);
 		return rideList;
 	}
 

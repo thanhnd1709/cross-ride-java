@@ -5,7 +5,6 @@ package com.crossover.techtrial.controller;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crossover.techtrial.dto.TopDriverDTO;
+import com.crossover.techtrial.exceptions.RideException;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
 import com.crossover.techtrial.service.RideService;
@@ -43,6 +43,9 @@ public class RideController {
 
 	@PostMapping(path = "/api/ride")
 	public ResponseEntity<Ride> createNewRide(@Valid @RequestBody Ride ride) {
+		if (ride.getStartTime().isAfter(ride.getEndTime())) {
+			throw new RideException("Ride start time should before end time");
+		}
 		rideService.save(ride);
 		log.info("Ride {} was registered successfully", ride);
 		return ResponseEntity.ok(ride);
@@ -72,7 +75,9 @@ public class RideController {
 			@RequestParam(value = "startTime", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime startTime,
 			@RequestParam(value = "endTime", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime endTime) {
 
-		List<TopDriverDTO> topDrivers = new ArrayList<TopDriverDTO>();
+		
+		List<TopDriverDTO> topDrivers = rideService.getTopRides(count, startTime, endTime);
+		
 		
 		/*
 		// start implementation
@@ -100,6 +105,7 @@ public class RideController {
 		// average, or max total distance?
 		// Therefore, i just return 5 (or count) top rows
 		return ResponseEntity.ok(topDrivers.stream().limit(count).collect(Collectors.toList()));
+		//return null;
 
 	}
 

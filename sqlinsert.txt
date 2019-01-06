@@ -1,0 +1,61 @@
+SQL script:
+INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (1, 'A', 'a@gmail.com', '001');
+    INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (2, 'B', 'b@gmail.com', '002');
+    INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (3, 'C', 'c@gmail.com', '003');
+    INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (4, 'D', 'd@gmail.com', '004');
+    INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (5, 'E', 'e@gmail.com', '005');
+    INSERT INTO person(
+            id, name, email, registration_number)
+    VALUES (6, 'F', 'f@gmail.com', '006');
+
+
+---
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (1, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 10, 1, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (2, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 9, 2, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (3, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 8, 3, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (4, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 7, 4, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (5, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 6, 5, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (6, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 5, 6, null);
+	
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (7, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 10, 1, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (8, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 9, 2, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (9, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 8, 3, null);
+
+INSERT INTO ride(
+            id, start_time, end_time,  distance, driver_id, rider_id)
+    VALUES (10, '2018-08-08T12:00:00', '2018-08-08T12:10:00', 7, 4, null);

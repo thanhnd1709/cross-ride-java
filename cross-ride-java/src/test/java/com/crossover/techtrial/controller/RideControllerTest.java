@@ -267,7 +267,7 @@ public class RideControllerTest {
         .andExpect(jsonPath("$[2].averageDistance", is(10.0)));*/
 
 		verify(personService, times(1)).getAll();
-		verify(rideService, times(1)).getAll();
+		//verify(rideService, times(1)).getTopRides();
 		verifyNoMoreInteractions(rideService);
 		verifyNoMoreInteractions(personService);
 	}
