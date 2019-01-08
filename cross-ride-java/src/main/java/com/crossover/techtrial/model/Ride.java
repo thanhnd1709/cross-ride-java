@@ -16,13 +16,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
 @Entity
 @Table(name = "ride")
-
 public @Data class Ride implements Serializable {
 
 	private static final long serialVersionUID = 9097639215351514001L;
