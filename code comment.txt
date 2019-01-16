@@ -8,15 +8,15 @@
 	- to get list driver that has drive.startTime >= inputStartTime and drive.endTime <= inputEndTime : use sql to get list of driver. It's a nightmare to use api since can cause performance issue => very serious
 	- to calculate average distance, max duration, total duration ... : use window method of sql, better performance. The current api to calculate average, by personService.getAll() is truely terrible.
 	- also use sql to return the limit of record
-6. Need to improve exception handler.
+6. Need to improve exception handler. >> DOING
 	- the message : "Unable to process this request." is too common and not specific, need to handle more specific case with detail message
 	- no logging mechanism in all class => not acceptable
 	
 7. Model : 
-	- Person.name should be not null
-	- Ride.distance should be validated to be > 0
-	- all the constraint (not null,...) should be added to database level (db.changelog.xml)
-	- need valdiation of model for name,email,number to not bigger than 255 chars
+	- Person.name should be not null >> DONE
+	- Ride.distance should be validated to be > 0 >> DONE
+	- all the constraint (not null,...) should be added to database level (db.changelog.xml) >> DONE
+	- need valdiation of model for name,email,number to not bigger than 255 chars >> DONE
 	
 	
 8. repository : 
