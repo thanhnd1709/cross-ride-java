@@ -15,4 +15,5 @@ import com.crossover.techtrial.model.Person;
  */
 @RestResource(exported = false)
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
+	
 }

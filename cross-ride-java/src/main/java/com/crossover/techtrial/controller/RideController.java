@@ -6,9 +6,7 @@ package com.crossover.techtrial.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.crossover.techtrial.dto.TopDriverDTO;
 import com.crossover.techtrial.exceptions.RideException;
 import com.crossover.techtrial.model.Ride;
 import com.crossover.techtrial.service.PersonService;
 import com.crossover.techtrial.service.RideService;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,6 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class RideController {
+	
+	public static final String START_AFTER_END_ERROR_MESSAGE = "Ride start time should before end time";
+	public static final String DRIVER_AND_RIDER_EMPTY_ERROR_MESSAGE = "Must at least has rider or driver";
+	public static final String RIDER_NOT_REGISTERED_ERROR_MESSAGE = "Rider has not been registered";
+	public static final String DRIVER_NOT_REGISTERED_ERROR_MESSAGE = "Driver has not been registered";
 
 	@Autowired
 	private RideService rideService;
@@ -47,18 +48,18 @@ public class RideController {
 	public ResponseEntity<Ride> createNewRide(@Valid @RequestBody Ride ride) {
 		// if start time after end time, throw exception
 		if (ride.getStartTime().isAfter(ride.getEndTime())) {
-			throw new RideException("Ride start time should before end time");
+			throw new RideException(START_AFTER_END_ERROR_MESSAGE);
 		}
 		if (ride.getRider() == null && ride.getDriver() == null) {
-			throw new RideException("Must at least has rider or driver");
+			throw new RideException(DRIVER_AND_RIDER_EMPTY_ERROR_MESSAGE);
 		}
 		// if rider has not been registered before
 		if (ride.getRider() != null && ride.getRider().getId() != 0 && personService.findById(ride.getRider().getId()) == null) {
-			throw new RideException("Rider has not been registered");
+			throw new RideException(RIDER_NOT_REGISTERED_ERROR_MESSAGE);
 		}
 		// if driver has not been registered before
 		if (ride.getDriver() != null && ride.getDriver().getId() != 0 && personService.findById(ride.getDriver().getId()) == null) {
-			throw new RideException("Driver has not been registered");
+			throw new RideException(DRIVER_NOT_REGISTERED_ERROR_MESSAGE);
 		}
 		rideService.save(ride);
 		log.info("Ride {} was registered successfully", ride);

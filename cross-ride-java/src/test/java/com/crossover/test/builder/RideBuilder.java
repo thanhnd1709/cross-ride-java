@@ -1,12 +1,14 @@
 package com.crossover.test.builder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
 
 public class RideBuilder {
 
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
 	Long id;
 	LocalDateTime startTime;
 	LocalDateTime endTime;
@@ -19,13 +21,13 @@ public class RideBuilder {
 		return this;
 	}
 
-	public RideBuilder withStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
+	public RideBuilder withStartTime(String startTime) {
+		this.startTime = LocalDateTime.parse(startTime, formatter);
 		return this;
 	}
 
-	public RideBuilder withEndTime(LocalDateTime endTime) {
-		this.endTime = endTime;
+	public RideBuilder withEndTime(String endTime) {
+		this.endTime = LocalDateTime.parse(endTime, formatter);
 		return this;
 	}
 
