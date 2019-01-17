@@ -2,7 +2,6 @@
  * 
  */
 package com.crossover.techtrial.controller;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -35,7 +34,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.repositories.PersonRepository;
@@ -48,6 +46,7 @@ import com.crossover.test.builder.TestUtil;
  * @author thanhnd
  *
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class PersonControllerTest {
@@ -152,10 +151,44 @@ public class PersonControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	public void register_PersonWithNullId_ShouldReturnBadRequest() throws IOException, Exception {
+		Person entry = new PersonBuilder()
+				.withId(null)
+				.withName("david")
+				.withEmail("david@crossover.com")
+				.withRegistrationNumber("P001")
+				.build();
+		MvcResult result = mockMvc.perform(post("/api/person")
+	                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+	                .content(TestUtil.convertObjectToJsonBytes(entry)))
+	                .andExpect(status().isBadRequest())
+	                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+        verifyZeroInteractions(personService);
+	}
+	
+	@Test
+	public void register_PersonWithNullName_ShouldReturnBadRequest() throws IOException, Exception {
+		Person entry = new PersonBuilder()
+				.withId(1L)
+				.withName(null)
+				.withEmail("david@crossover.com")
+				.withRegistrationNumber("P001")
+				.build();
+		MvcResult result = mockMvc.perform(post("/api/person")
+	                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+	                .content(TestUtil.convertObjectToJsonBytes(entry)))
+	                .andExpect(status().isBadRequest())
+	                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+        verifyZeroInteractions(personService);
+	}
+	
+	@Test
 	public void register_PersonWithNullEmail_ShouldReturnBadRequest() throws IOException, Exception {
 		Person entry = new PersonBuilder()
 				.withId(1L)
-				.withName("David")
+				.withName("david")
 				.withEmail(null)
 				.withRegistrationNumber("P001")
 				.build();
@@ -168,35 +201,13 @@ public class PersonControllerTest {
         verifyZeroInteractions(personService);
 	}
 	
-	/**
-	 * This method test the validation step (@Valid) of id field
-	 * with the input of the id is null.
-	 * @throws Exception
-	 */
-	/*@Test
-	public void add_NullId_ShouldReturnValidationErrorsForNullId() throws Exception {
-		Person entry = new PersonBuilder()
-				.withId(null)
-				.withName("David")
-				.withEmail("david@crossover.com")
-				.withRegistrationNumber("P001")
-				.build();
-		
-		MvcResult result = mockMvc.perform(post("/api/person")
-	                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-	                .content(TestUtil.convertObjectToJsonBytes(entry)))
-	                .andExpect(status().isBadRequest())
-	                .andReturn();
-		assertThat(result.getResolvedException(), is(notNullValue()));
-        verifyZeroInteractions(personService);
-	}*/
 	
 	/**
 	 * This method test the successfully case when saving person
 	 * @throws Exception
 	 */
-	/*@Test
-    public void save_NewPersonEntry_ShouldSavePersonEntryAndReturnSavedEntry() throws Exception {
+	@Test
+    public void register_NewPersonEntry_ShouldSavePersonEntryAndReturnSavedEntry() throws Exception {
 		Person savedEntry = new PersonBuilder()
 				.withId(1L)
 				.withName("David")
@@ -219,11 +230,9 @@ public class PersonControllerTest {
         verifyNoMoreInteractions(personService);
         
         Person entryArgument = entryCaptor.getValue();
-//        assertThat(entryArgument.getId(), is(1L));
-//        assertThat(entryArgument.getName(), is("David"));
-//        assertThat(entryArgument.getEmail(), is("david@crossover.com"));
-//        assertThat(entryArgument.getRegistrationNumber(), is("P001"));
-        
-        
-	}*/
+        assertThat(entryArgument.getId(), is(1L));
+        assertThat(entryArgument.getName(), is("David"));
+        assertThat(entryArgument.getEmail(), is("david@crossover.com"));
+        assertThat(entryArgument.getRegistrationNumber(), is("P001"));
+	}
 }

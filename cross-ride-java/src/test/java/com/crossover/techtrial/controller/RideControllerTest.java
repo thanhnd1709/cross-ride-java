@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.crossover.techtrial.dto.TopDriverDTO;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
 import com.crossover.techtrial.repositories.PersonRepository;
@@ -39,6 +42,7 @@ import com.crossover.techtrial.service.RideService;
 import com.crossover.test.builder.PersonBuilder;
 import com.crossover.test.builder.RideBuilder;
 import com.crossover.test.builder.TestUtil;
+import com.crossover.test.builder.TopDriverDTOBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -77,8 +81,8 @@ public class RideControllerTest {
 		Person rider = new Person(3L, "Tom", "tom@crossover.com", "P002");
 		Ride found = new RideBuilder()
 				.withId(1L)
-				//.withStartTime("300")
-				//.withEndTime("300")
+				.withStartTime("2018-09-18 14:00:01")
+				.withEndTime("2018-09-18 15:00:01")
 				.withDistance(1L)
 				.withDriver(driver)
 				.withRider(rider)
@@ -88,8 +92,18 @@ public class RideControllerTest {
 		        .andExpect(status().isOk())
 		        .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
 		        .andExpect(jsonPath("$.id", is(1)))
-		        .andExpect(jsonPath("$.startTime", is("300")))
-		        .andExpect(jsonPath("$.endTime", is("300")))
+		        .andExpect(jsonPath("$.startTime[0]", is(2018)))
+		        .andExpect(jsonPath("$.startTime[1]", is(9)))
+		        .andExpect(jsonPath("$.startTime[2]", is(18)))
+		        .andExpect(jsonPath("$.startTime[3]", is(14)))
+		        .andExpect(jsonPath("$.startTime[4]", is(00)))
+		        .andExpect(jsonPath("$.startTime[5]", is(01)))
+		        .andExpect(jsonPath("$.endTime[0]", is(2018)))
+		        .andExpect(jsonPath("$.endTime[1]", is(9)))
+		        .andExpect(jsonPath("$.endTime[2]", is(18)))
+		        .andExpect(jsonPath("$.endTime[3]", is(15)))
+		        .andExpect(jsonPath("$.endTime[4]", is(00)))
+		        .andExpect(jsonPath("$.endTime[5]", is(01)))
 		        .andExpect(jsonPath("$.distance", is(1)))
 		        .andExpect(jsonPath("$.driver.id", is(driver.getId().intValue())))
 		        .andExpect(jsonPath("$.driver.name", is(driver.getName())))
@@ -99,7 +113,6 @@ public class RideControllerTest {
 		        .andExpect(jsonPath("$.rider.name", is(rider.getName())))
 				.andExpect(jsonPath("$.rider.email", is(rider.getEmail())))
 				.andExpect(jsonPath("$.rider.registrationNumber", is(rider.getRegistrationNumber())));
-		        //.andExpect(jsonPath("$.rider", is(rider.toString())));
 
 		verify(rideService, times(1)).findById(1L);
 		verifyNoMoreInteractions(rideService);
@@ -125,11 +138,11 @@ public class RideControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void add_NewRideWithNullId_ShouldReturnValidationError() throws Exception {
+	public void createNewRide_WithNullId_ShouldReturnBadRequest() throws Exception {
 		Ride entry = new RideBuilder()
 				.withId(null)
-				//.withStartTime("300")
-				//.withEndTime("300")
+				.withStartTime("2018-09-18 14:00:00")
+				.withEndTime("2018-09-18 15:00:00")
 				.withDistance(1L)
 				.withDriver(new Person())
 				.withRider(new Person())
@@ -151,11 +164,11 @@ public class RideControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void add_NewRideWithNullStartTime_ShouldReturnValidationError() throws Exception {
+	public void createNewRide_WithNullStartTime_ShouldReturnBadRequest() throws Exception {
 		Ride entry = new RideBuilder()
 				.withId(1L)
 				.withStartTime(null)
-				//.withEndTime("300")
+				.withEndTime("2018-09-18 14:00:00")
 				.withDistance(1L)
 				.withDriver(new Person())
 				.withRider(new Person())
@@ -176,10 +189,10 @@ public class RideControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void add_NewRideWithNullEndTime_ShouldReturnValidationError() throws Exception {
+	public void createNewRide_WithNullEndTime_ShouldReturnBadRequest() throws Exception {
 		Ride entry = new RideBuilder()
 				.withId(1L)
-				//.withStartTime("300")
+				.withStartTime("2018-09-18 14:00:00")
 				.withEndTime(null)
 				.withDistance(1L)
 				.withDriver(new Person())
@@ -194,6 +207,103 @@ public class RideControllerTest {
 		assertThat(result.getResolvedException(), is(notNullValue()));
         verifyZeroInteractions(rideService);
 	}
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void createNewRide_WithStartTimeAfterEndTime_ShouldReturnBadRequest() throws Exception {
+		Ride entry = new RideBuilder()
+				.withId(1L)
+				.withStartTime("2018-09-18 14:00:00")
+				.withEndTime("2017-09-18 14:00:00")
+				.withDistance(1L)
+				.withDriver(new Person())
+				.withRider(new Person())
+				.build();
+		MvcResult result = mockMvc.perform(post("/api/ride")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(entry)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().string(RideController.START_AFTER_END_ERROR_MESSAGE))
+                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+	    verifyZeroInteractions(rideService);
+	}
+	
+	@Test
+	public void createNewRide_WithBothNullDriverAndRider_ShouldReturnBadRequest() throws Exception {
+		Ride entry = new RideBuilder()
+				.withId(1L)
+				.withStartTime("2018-09-18 14:00:00")
+				.withEndTime("2019-09-18 14:00:00")
+				.withDistance(1L)
+				.withDriver(null)
+				.withRider(null)
+				.build();
+		MvcResult result = mockMvc.perform(post("/api/ride")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(entry)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().string(RideController.START_AFTER_END_ERROR_MESSAGE))
+                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+	    verifyZeroInteractions(rideService);
+	}
+	
+	@Test
+	public void createNewRide_WithNotRegisteredRider_ShouldReturnBadRequest() throws Exception {
+		Person person = new PersonBuilder()
+				.withId(1L)
+				.withName("david")
+				.withEmail("david@crossover.com")
+				.withRegistrationNumber("P001")
+				.build();
+		Ride entry = new RideBuilder()
+				.withId(1L)
+				.withStartTime("2018-09-18 14:00:00")
+				.withEndTime("2019-09-18 14:00:00")
+				.withDistance(1L)
+				.withDriver(null)
+				.withRider(person)
+				.build();
+		when(personService.findById(1L)).thenReturn(null);
+		MvcResult result = mockMvc.perform(post("/api/ride")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(entry)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().string(RideController.START_AFTER_END_ERROR_MESSAGE))
+                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+	    verifyZeroInteractions(rideService);
+	}
+	
+	@Test
+	public void createNewRide_WithNotRegisteredDriver_ShouldReturnBadRequest() throws Exception {
+		Person person = new PersonBuilder()
+				.withId(1L)
+				.withName("david")
+				.withEmail("david@crossover.com")
+				.withRegistrationNumber("P001")
+				.build();
+		Ride entry = new RideBuilder()
+				.withId(1L)
+				.withStartTime("2018-09-18 14:00:00")
+				.withEndTime("2019-09-18 14:00:00")
+				.withDistance(1L)
+				.withDriver(person)
+				.withRider(null)
+				.build();
+		when(personService.findById(1L)).thenReturn(null);
+		MvcResult result = mockMvc.perform(post("/api/ride")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(entry)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().string(RideController.START_AFTER_END_ERROR_MESSAGE))
+                .andReturn();
+		assertThat(result.getResolvedException(), is(notNullValue()));
+	    verifyZeroInteractions(rideService);
+	}
 	
 	/**
 	 * This method test the '/api/top-rides' to get top count driver
@@ -204,71 +314,78 @@ public class RideControllerTest {
 	 */
 	@Test
 	public void get_TopDriverShouldReturnFoundDriver()  throws Exception{
-		Person first = new PersonBuilder().withId(1L).withName("first")
-				.withEmail("first@crossover.com") .withRegistrationNumber("P001").build();
-		Person second = new PersonBuilder().withId(2L).withName("second")
-				.withEmail("second@crossover.com").withRegistrationNumber("P002").build();
-		Person third = new PersonBuilder().withId(3L).withName("third")
-				.withEmail("third@crossover.com").withRegistrationNumber("P003").build();
-		Person fouth = new PersonBuilder().withId(4L).withName("fouth")
-				.withEmail("fouth@crossover.com").withRegistrationNumber("P004").build();
-		Person fifth = new PersonBuilder().withId(5L).withName("fifth")
-				.withEmail("fifth@crossover.com").withRegistrationNumber("P005").build();
-		List<Person> personList = new ArrayList<Person>();
-		personList.add(first);
-		personList.add(second);
-		personList.add(third);
-		personList.add(fouth);
-		personList.add(fifth);
-		/*Ride firstRide = new RideBuilder().withId(first.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:01:00")
-				.withDistance(10L).withDriver(first).withRider(null).build();
-		// Be carefule that we set the driver of secondride is 0 here
-		Ride secondRide = new RideBuilder().withId(second.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:01:00")
-				.withDistance(10L).withDriver(null).withRider(null).build();
-		Ride thirdRide = new RideBuilder().withId(third.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:01:00")
-				.withDistance(10L).withDriver(third).withRider(null).build();
-		Ride fouthRide = new RideBuilder().withId(fouth.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:01:00")
-				.withDistance(10L).withDriver(fouth).withRider(null).build();
-		Ride fifthRide = new RideBuilder().withId(fifth.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:01:00")
-				.withDistance(10L).withDriver(fifth).withRider(null).build();
-		Ride sixthRide = new RideBuilder().withId(first.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:02:00")
-				.withDistance(20L).withDriver(first).withRider(null).build();
-		Ride seventhRide = new RideBuilder().withId(first.getId()).withStartTime("2018-09-18T14:00:00").withEndTime("2018-09-18T14:03:00")
-				.withDistance(30L).withDriver(first).withRider(null).build();
-		List<Ride> rideList = new ArrayList<Ride>();
-		rideList.add(firstRide);
-		rideList.add(secondRide);
-		rideList.add(thirdRide);
-		rideList.add(fouthRide);
-		rideList.add(fifthRide);
-		rideList.add(sixthRide);
-		rideList.add(seventhRide);
-		
-		when(personService.getAll()).thenReturn(personList);
-		when(rideService.getAll()).thenReturn(rideList);
-		mockMvc.perform(get("/api/top-rides?max=3&startTime=2018-09-18T14:00:00&endTime=2018-09-18T14:03:00"))
+		TopDriverDTO first = new TopDriverDTOBuilder()
+				.withName("first")
+				.withEmail("first@crossover.com")
+				.withTotalRideDurationInSeconds(100L)
+				.withMaxRideDurationInSecods(100L)
+				.withAverageDistance(10.0).build();
+		TopDriverDTO second = new TopDriverDTOBuilder()
+				.withName("second")
+				.withEmail("second@crossover.com")
+				.withTotalRideDurationInSeconds(200L)
+				.withMaxRideDurationInSecods(200L)
+				.withAverageDistance(20.0).build();
+		TopDriverDTO third = new TopDriverDTOBuilder()
+				.withName("third")
+				.withEmail("third@crossover.com")
+				.withTotalRideDurationInSeconds(300L)
+				.withMaxRideDurationInSecods(300L)
+				.withAverageDistance(30.0).build();
+		TopDriverDTO fouth = new TopDriverDTOBuilder()
+				.withName("fouth")
+				.withEmail("fouth@crossover.com")
+				.withTotalRideDurationInSeconds(400L)
+				.withMaxRideDurationInSecods(400L)
+				.withAverageDistance(40.0).build();
+		TopDriverDTO fifth = new TopDriverDTOBuilder()
+				.withName("fifth")
+				.withEmail("fifth@crossover.com")
+				.withTotalRideDurationInSeconds(500L)
+				.withMaxRideDurationInSecods(500L)
+				.withAverageDistance(50.0).build();
+		List<TopDriverDTO> topDriverList = new ArrayList<TopDriverDTO>();
+		topDriverList.add(first);
+		topDriverList.add(second);
+		topDriverList.add(third);
+		topDriverList.add(fouth);
+		topDriverList.add(fifth);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime startTime = LocalDateTime.parse("2018-09-18 14:00:00", formatter);
+		LocalDateTime endTime = LocalDateTime.parse("2018-09-18 14:03:00", formatter);
+		when(rideService.getTopRides(5L, startTime, endTime)).thenReturn(topDriverList);
+		mockMvc.perform(get("/api/top-rides?max=5&startTime=2018-09-18T14:00:00&endTime=2018-09-18T14:03:00"))
 		.andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
         .andExpect(jsonPath("$[0].name", is(first.getName())))
         .andExpect(jsonPath("$[0].email", is(first.getEmail())))
-        .andExpect(jsonPath("$[0].totalRideDurationInSeconds", is(360)))
-        .andExpect(jsonPath("$[0].maxRideDurationInSecods", is(180)))
-        .andExpect(jsonPath("$[0].averageDistance", is(20.0)))
-		.andExpect(jsonPath("$[1].name", is(third.getName())))
-        .andExpect(jsonPath("$[1].email", is(third.getEmail())))
-        .andExpect(jsonPath("$[1].totalRideDurationInSeconds", is(60)))
-        .andExpect(jsonPath("$[1].maxRideDurationInSecods", is(60)))
-        .andExpect(jsonPath("$[1].averageDistance", is(10.0)))
-		.andExpect(jsonPath("$[2].name", is(fouth.getName())))
-        .andExpect(jsonPath("$[2].email", is(fouth.getEmail())))
-        .andExpect(jsonPath("$[2].totalRideDurationInSeconds", is(60)))
-        .andExpect(jsonPath("$[2].maxRideDurationInSecods", is(60)))
-        .andExpect(jsonPath("$[2].averageDistance", is(10.0)));*/
+        .andExpect(jsonPath("$[0].totalRideDurationInSeconds", is(100)))
+        .andExpect(jsonPath("$[0].maxRideDurationInSecods", is(100)))
+        .andExpect(jsonPath("$[0].averageDistance", is(10.0)))
+		.andExpect(jsonPath("$[1].name", is(second.getName())))
+        .andExpect(jsonPath("$[1].email", is(second.getEmail())))
+        .andExpect(jsonPath("$[1].totalRideDurationInSeconds", is(200)))
+        .andExpect(jsonPath("$[1].maxRideDurationInSecods", is(200)))
+        .andExpect(jsonPath("$[1].averageDistance", is(20.0)))
+		.andExpect(jsonPath("$[2].name", is(third.getName())))
+        .andExpect(jsonPath("$[2].email", is(third.getEmail())))
+        .andExpect(jsonPath("$[2].totalRideDurationInSeconds", is(300)))
+        .andExpect(jsonPath("$[2].maxRideDurationInSecods", is(300)))
+        .andExpect(jsonPath("$[2].averageDistance", is(30.0)))
+		.andExpect(jsonPath("$[3].name", is(fouth.getName())))
+        .andExpect(jsonPath("$[3].email", is(fouth.getEmail())))
+        .andExpect(jsonPath("$[3].totalRideDurationInSeconds", is(400)))
+        .andExpect(jsonPath("$[3].maxRideDurationInSecods", is(400)))
+        .andExpect(jsonPath("$[3].averageDistance", is(40.0)))
+		.andExpect(jsonPath("$[4].name", is(fifth.getName())))
+        .andExpect(jsonPath("$[4].email", is(fifth.getEmail())))
+        .andExpect(jsonPath("$[4].totalRideDurationInSeconds", is(500)))
+        .andExpect(jsonPath("$[4].maxRideDurationInSecods", is(500)))
+        .andExpect(jsonPath("$[4].averageDistance", is(50.0)));
 
-		verify(personService, times(1)).getAll();
+		verify(rideService, times(1)).getTopRides(5L, startTime, endTime);
 		//verify(rideService, times(1)).getTopRides();
-		verifyNoMoreInteractions(rideService);
 		verifyNoMoreInteractions(personService);
 	}
 

@@ -8,7 +8,7 @@ import com.crossover.techtrial.model.Ride;
 
 public class RideBuilder {
 
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	Long id;
 	LocalDateTime startTime;
 	LocalDateTime endTime;
@@ -22,12 +22,20 @@ public class RideBuilder {
 	}
 
 	public RideBuilder withStartTime(String startTime) {
-		this.startTime = LocalDateTime.parse(startTime, formatter);
+		if (startTime == null) {
+			this.startTime = null;
+		} else {
+			this.startTime = LocalDateTime.parse(startTime, formatter);
+		}
 		return this;
 	}
 
 	public RideBuilder withEndTime(String endTime) {
-		this.endTime = LocalDateTime.parse(endTime, formatter);
+		if (endTime == null) {
+			this.endTime = null;
+		} else {
+			this.endTime = LocalDateTime.parse(endTime, formatter);
+		}
 		return this;
 	}
 
