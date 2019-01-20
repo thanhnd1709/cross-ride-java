@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		log.error("Bad request: Method argument not valid exception", ex);
+		log.error("Bad request: Method argument not valid exception.", ex);
 		List<FieldError> errors = ex.getBindingResult().getFieldErrors();
 		List<String> message = new ArrayList<>();
 		for (FieldError e : errors){
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		log.error("Exception: Message not readable ", ex);
+		log.error("Exception: Message not readable.", ex);
 		return handleExceptionInternal(ex, DATE_FORMAT_ERROR_MESSAGE, headers, status, request);
 	}
 	
