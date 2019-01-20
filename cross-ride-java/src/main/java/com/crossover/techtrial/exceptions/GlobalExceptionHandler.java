@@ -20,11 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+	public static final String DATE_FORMAT_ERROR_MESSAGE = "Please enter correct Date Time format";
 	@Override
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		log.error("Method argument not valid exception", ex);
+		log.error("Bad request: Method argument not valid exception", ex);
 		List<FieldError> errors = ex.getBindingResult().getFieldErrors();
 		List<String> message = new ArrayList<>();
 		for (FieldError e : errors){
@@ -37,8 +38,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		log.error("Message not readable exception", ex);
-		return handleExceptionInternal(ex, "Please enter correct Date Time format", headers, status, request);
+		log.error("Exception: Message not readable ", ex);
+		return handleExceptionInternal(ex, DATE_FORMAT_ERROR_MESSAGE, headers, status, request);
 	}
 	
 	@ExceptionHandler(value= {RideException.class}) 
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		// general exception
 		log.error("Exception: Unable to process this request. ", exception);
 		AbstractMap.SimpleEntry<String, String> response = new AbstractMap.SimpleEntry<>("message",
-				"Unable to process this request.");
+				"Bad request: Unable to process this request");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 }

@@ -151,7 +151,7 @@ public class PersonControllerTest {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	@Test
+	/*@Test
 	public void register_PersonWithNullId_ShouldReturnBadRequest() throws IOException, Exception {
 		Person entry = new PersonBuilder()
 				.withId(null)
@@ -166,7 +166,7 @@ public class PersonControllerTest {
 	                .andReturn();
 		assertThat(result.getResolvedException(), is(notNullValue()));
         verifyZeroInteractions(personService);
-	}
+	}*/
 	
 	@Test
 	public void register_PersonWithNullName_ShouldReturnBadRequest() throws IOException, Exception {
