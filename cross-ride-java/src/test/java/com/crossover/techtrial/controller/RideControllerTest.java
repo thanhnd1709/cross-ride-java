@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.crossover.techtrial.dto.TopDriverDTO;
+import com.crossover.techtrial.exceptions.GlobalExceptionHandler;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.model.Ride;
 import com.crossover.techtrial.repositories.PersonRepository;
@@ -67,7 +68,7 @@ public class RideControllerTest {
 	 */
 	@Before
 	public void setup() throws Exception {
-		mockMvc = MockMvcBuilders.standaloneSetup(rideController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(rideController).setControllerAdvice(new GlobalExceptionHandler()).build();
 	}
 	
 	/**

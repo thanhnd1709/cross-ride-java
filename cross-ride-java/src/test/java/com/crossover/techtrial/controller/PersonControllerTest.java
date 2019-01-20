@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.crossover.techtrial.exceptions.GlobalExceptionHandler;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.repositories.PersonRepository;
 import com.crossover.techtrial.service.PersonService;
@@ -68,7 +69,7 @@ public class PersonControllerTest {
 	 */
 	@Before
 	public void setup() throws Exception {
-		mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(personController).setControllerAdvice(new GlobalExceptionHandler()).build();
 	}
 
 	/**

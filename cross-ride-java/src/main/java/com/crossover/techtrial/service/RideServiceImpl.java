@@ -39,8 +39,8 @@ public class RideServiceImpl implements RideService {
 	RideRepository rideRepository;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	@CachePut (value = "person", key = "#result.id")
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	@CachePut (value = "ride", key = "#result.id")
 	public Ride save(Ride ride) {
 		return rideRepository.save(ride);
 	}

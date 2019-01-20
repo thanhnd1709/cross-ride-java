@@ -1,7 +1,6 @@
 package com.crossover.test.builder;
 
 import com.crossover.techtrial.dto.TopDriverDTO;
-import com.crossover.techtrial.model.Ride;
 
 public class TopDriverDTOBuilder {
 	

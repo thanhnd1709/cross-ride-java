@@ -37,7 +37,7 @@ public class PersonServiceImpl implements PersonService {
 
 	}
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	@CachePut (value = "person", key = "#result.id")
 	public Person save(Person p) {
 		return personRepository.save(p);

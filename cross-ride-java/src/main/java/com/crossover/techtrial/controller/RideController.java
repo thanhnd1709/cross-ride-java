@@ -54,11 +54,11 @@ public class RideController {
 			throw new RideException(DRIVER_AND_RIDER_EMPTY_ERROR_MESSAGE);
 		}
 		// if rider has not been registered before
-		if (ride.getRider() != null && ride.getRider().getId() != 0 && personService.findById(ride.getRider().getId()) == null) {
+		if (ride.getRider() != null && ride.getRider().getId() == null && personService.findById(ride.getRider().getId()) == null) {
 			throw new RideException(RIDER_NOT_REGISTERED_ERROR_MESSAGE);
 		}
 		// if driver has not been registered before
-		if (ride.getDriver() != null && ride.getDriver().getId() != 0 && personService.findById(ride.getDriver().getId()) == null) {
+		if (ride.getDriver() != null && ride.getDriver().getId() == null && personService.findById(ride.getDriver().getId()) == null) {
 			throw new RideException(DRIVER_NOT_REGISTERED_ERROR_MESSAGE);
 		}
 		rideService.save(ride);
