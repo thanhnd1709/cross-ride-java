@@ -89,7 +89,7 @@ public class RideControllerTest {
 				.withRider(rider)
 				.build();
 		when(rideService.findById(1L)).thenReturn(found);
-		MvcResult result =  mockMvc.perform(get("/api/ride/{ride-id}", 1L))
+		mockMvc.perform(get("/api/ride/{ride-id}", 1L))
 		        .andExpect(status().isOk())
 		        .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
 		        .andExpect(jsonPath("$.id", is(1)))
