@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * @author crossover
@@ -41,6 +41,6 @@ public class CrossRideApplication {
 
 	@PostConstruct
 	public void setUp() {
-		objectMapper.registerModule(new JSR310Module());
+		objectMapper.registerModule(new JavaTimeModule());
 	}
 }

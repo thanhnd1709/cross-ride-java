@@ -1,0 +1,82 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+	public static void main(String[] args) {
+		// TODO Auto-generated constructor stub
+				//int num = (int) 50.05L;
+				byte x = (byte) 50L;
+				long y = (byte) 50;
+				byte z = (byte) 50L;
+	}
+
+}
+
+class Gcd {
+	private static int first(int a, int b) {
+		if (b==0) {
+			return a;
+		} else { 
+			return second(b, a-b);
+		}
+	}
+	private static int second(int a, int b) {
+		if (a == 0) {
+			return b;
+		} else {
+			return first(b,a);
+		}
+	}
+	public static void main(String[] args) {
+		System.out.println(first(5,3));
+	}
+
+}
+
+class Base{
+	public static void main(String[] args) {
+		System.out.println("ABCD");
+	}
+}
+
+class Test extends Base {
+	public static void main(String[] args) {
+		Object obj1 = new Object();
+		Object obj2 = new Object();
+		System.out.println("result: ");
+		System.out.println((obj1 == obj2) + " ");
+		System.out.println((obj1.equals(obj2)) + " ");
+		obj1 = obj2;
+		System.out.println((obj1.equals(obj2)) + " ");
+	}
+}
+
+class Updater {
+	static volatile Map<String, Integer> m;
+	public static void main(String[] args) {
+		String s = "";
+		for (int i = 0; i < 100; i++) {
+			s+= String.valueOf(i);
+		}
+		System.out.println(s);
+	}
+	public synchronized void update(String k, Integer v) {
+		if (m == null) {
+			m = new HashMap<>();
+		}
+		Integer pv =  m.getOrDefault(k, 0);
+		m.put(k, pv + v);
+		
+	}
+	public static synchronized int calculateSum() {
+		int sum = 0;
+		for (Integer v : m.values()) {
+			sum += v;
+		}
+		return sum;
+	}
+	
+
+}
+
+

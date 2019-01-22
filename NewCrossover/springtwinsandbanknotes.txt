@@ -1,0 +1,108 @@
+// string twins
+import java.io.*;
+import java.util.*;
+
+public class Tester {
+	/**
+	 * Complete the function below. DO NOT MODIFY anything outside this method.
+	 */
+	static boolean[] twins(String[] a, String[] b) {
+		boolean[] result = new boolean[a.length];
+		ArrayList<Character> odd_a = new ArrayList<Character>();
+		ArrayList<Character> even_a = new ArrayList<Character>();
+		ArrayList<Character> odd_b = new ArrayList<Character>();
+		ArrayList<Character> even_b = new ArrayList<Character>();
+		int n = a.length;
+		for (int i = 0; i < n; i++) {
+			int j = a[i].length();
+			int k = b[i].length();
+			if (j == k) {
+				for (int l = 0; l < j; l++) {
+					if (l%2 == 0) {
+						odd_a.add(a[i].charAt(l));
+		                odd_b.add(b[i].charAt(l));
+					} else {
+						even_a.add(a[i].charAt(l));
+		                even_b.add(b[i].charAt(l));
+					}
+				}
+			} else {
+				result [i] = false;
+				break;
+			}
+			Collections.sort(odd_a);
+			Collections.sort(odd_b);
+			Collections.sort(even_a);
+			Collections.sort(even_b);
+			if (odd_a.equals(odd_b) && even_a.equals(even_b)) {
+				result [i] = true;
+			} else {
+				result [i] = false;
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		Scanner in = new Scanner(System.in);
+		int n = Integer.parseInt(in.nextLine().trim());
+		String[] a = new String[n];
+		for (int i = 0; i < n; i++) {
+			a[i] = in.nextLine();
+		}
+		int m = Integer.parseInt(in.nextLine().trim());
+		String[] b = new String[m];
+		for (int i = 0; i < m; i++) {
+			b[i] = in.nextLine();
+		}
+		// call twins function
+		boolean[] results = twins(a, b);
+		for (int i = 0; i < results.length; i++) {
+			System.out.println(results[i] ? "Yes" : "No");
+		}
+	}
+}
+//bank notes
+
+import java.io.*;
+import java.util.*;
+
+public class CoinChange {
+  
+    /**
+     * Complete the function below.
+     * DONOT MODIFY anything outside this function!
+     */
+    static long numberOfWaysToPay(int[] denominations,int denominationCount, int rent) {
+    	int[] table = new int[rent + 1];
+    	Arrays.fill(table, 0);
+    	table[0] = 1;
+    	for (int i = 0; i < denominationCount; i++ ) {
+    		for (int j = denominations[i]; j <= rent; j++) {
+    			table[j] += table[j-denominations[i]];
+    		}
+    	}
+        return table[rent];
+    }
+
+    /**
+     * DO NOT MODIFY THIS METHOD!
+     */
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        
+        int denominationCount = 0;
+        denominationCount = Integer.parseInt(in.nextLine().trim());
+        int[] denominations = new int[denominationCount];
+        String[] bankNotes =  in.nextLine().split(" ");
+        int element;
+        for (int i = 0; i < denominationCount; i++) {
+            denominations[i] = Integer.parseInt(bankNotes[i]);
+        }
+        int rent = in.nextInt();
+        long result = numberOfWaysToPay(denominations,denominationCount,rent);
+        
+        System.out.println(result);
+
+    }
+}

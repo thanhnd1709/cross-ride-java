@@ -1,0 +1,36 @@
+Next Questions will be for one project called “Cross-Solar”. Please start reading and answering
+questions in same order, because they will increase your knowledge about Cross-Solar
+incrementally.
+
+First question is a hands-on coding exercise. Remaining questions are free response and
+asking how you would approach the problem and what solutions you'd consider without any
+implementation. All Questions are mandatory.
+Make sure to answer all 5 questions before submission. Go to first question
+Q1. We have prepared a project assessment. Please download the project from this link. Review the Readme file with instructions on how to proceed. You can use an IDE of your choice.
+Once completed please extract a git patch file<steps are in readme file>, Store your file in a shared location where Crossover team can access and download it for evaluation. and add your sharable link in the answer field of this question.
+Please extract the patch file using provided commands not using IDE.
+Q2. There are massive requests for historical charts, because each time we aggregate data from hourly records to generate daily data, this operation overloads the server, Please describe how to optimize this operation without adding new servers. Description should cover all details in application layers or database -if required- and any edge case.
+Q3. Please describe all stages required to have CI/CD pipeline for Cross-Solar and the reason for having each stage.
+Q4. Crossover acquired “Green Energy Analytics” and has a deal with major solar panel company in the world. All production solar panels will have Cross-Solar client installed and sending data to our project.
+Our Challenge is Cross-Solar scale was for one State in USA “Texas” and after this deal Cross-Solar will receive data from panels all over the world. Load is expected to increase 1000x fold on the day of launch.
+Describe with technology names how you can scale Cross-Solar project.
+Feel free to split application or database or even change the database engine
+Q5. CCAT Test
+Please use the below link to complete the CCAT Test which is also mandatory in order to be considered for the final interview stage. Make sure you use your same name/email used to apply for this position. We will automatically look up your CCAT scores using this email address so it is vital the email addresses match.
+http://www.ondemandassessment.com/verify/apply/eBDeDmS/DhnwEbnT
+IMPORTANT: If you’ve already taken CCAT with Crossover using the same email address, there is no need to retake the CCAT. However, if your last application was earlier than 90 days ago, you can still retake the test.
+Criteria Cognitive Aptitude Test
+The CCAT measures cognitive aptitude, or general intelligence. This test provides an indication of a subject’s ability to solve problems, digest and apply information, learn new skills, and think critically. Cognitive aptitude is one of the most accurate job predictors of job success for any position.
+In the space below, you may enter anything you like to submit the test.
+---
+Hello, my name is Thanh. 
+I’m here to register to crossover and find a suitable job. 
+Let me tell you about three of my top skills.
+The first skill is Java related technologies. I’ve been working as a Java senior software engineer for about 7 years. I have strong knowledge about Java Core as well as other Java related Technologies like JSP and Servlet,  Struts, Spring Framework (Spring DI, Spring security, Spring A O P, Spring MVC), Spring boot… 
+The second one is front end skill. I have strong experience with some javascript frameworks like Angular JS, Angular 2, VueJS … I also have experience with other framework like bootstrap, html5. I also have been working as nodejs developer in several projects.
+The third skill I’d like to talk here is database experience with relational database like Oracle, SQL Server, MySQL as well as other No-SQL database like Cassandra or MongoDB. 
+Besides, I also have experience with many other technologies like Junit, git, machine learning …
+I hope that all of my skills fulfilled your requirement to work as java software architecture.
+Thank you very much!
+---
+https://vocaroo.com/i/s1uNfflXhOOX

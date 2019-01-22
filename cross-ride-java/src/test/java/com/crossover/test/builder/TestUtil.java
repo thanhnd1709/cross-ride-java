@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  
 public class TestUtil {
  
@@ -16,7 +16,7 @@ public class TestUtil {
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
     	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JSR310Module());
+        mapper.registerModule(new JavaTimeModule());
         mapper.setDateFormat(dateFormat);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
